@@ -517,6 +517,48 @@ jclass JVM_FindClassFromBootLoader(JNIEnv *env, const char *name) {
 }
 
 
+/* JVM_FindClassFromCaller
+ * Find a class from a given class loader.  Throws ClassNotFoundException.
+ *  name:   name of class
+ *  init:   whether initialization is done
+ *  loader: class loader to look up the class.
+ *          This may not be the same as the caller's class loader.
+ *  caller: initiating class. The initiating class may be null when a security
+ *          manager is not installed.
+ *
+ * Find a class with this name in this loader,
+ * using the caller's "protection domain".
+ */
+
+jclass JVM_FindClassFromCaller(JNIEnv *env, const char *name,
+                               jboolean init, jobject loader,
+                               jclass caller) {
+    Class *class;
+
+    TRACE("JVM_FindClassFromCaller(env=%p, name=%s, init=%d, loader=%p,"
+          " caller=%p)", env, name, init, loader, caller);
+
+    /* XXX The caller's protection domain should be used during
+       the findClassFromClassLoader but there is no specification or
+       unit-test in OpenJDK documenting the desired effect */
+
+    class = findClassFromClassLoader((char *)name, loader);
+
+    if(class == NULL) {
+        Object *excep = exceptionOccurred();
+        char *dot_name = slash2DotsDup((char*)name);
+
+        clearException();
+        signalChainedException(java_lang_ClassNotFoundException,
+                               dot_name, excep);
+        sysFree(dot_name);
+    } else if(init)
+        initClass(class);
+
+    return class;
+}
+
+
 /* JVM_FindClassFromClassLoader */
 
 jclass JVM_FindClassFromClassLoader(JNIEnv *env, const char *name,
