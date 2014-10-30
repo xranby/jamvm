@@ -2990,6 +2990,24 @@ void JVM_GetVersionInfo(JNIEnv *env, jvm_version_info *info, size_t info_size) {
 }
 
 
+/* JVM_GetTemporaryDirectory
+ * Return the temporary directory that the VM uses for the attach
+ * and perf data files.
+ *
+ * It is important that this directory is well-known and the
+ * same for all VM instances. It cannot be affected by configuration
+ * variables such as java.io.tmpdir.
+ *
+ * JamVM do not support the jvmstat framework thus this is left unimplemented.
+ */
+
+jstring JVM_GetTemporaryDirectory(JNIEnv *env) {
+    UNIMPLEMENTED("JVM_GetTemporaryDirectory");
+
+    return 0;
+}
+
+
 /* JVM_RegisterSignal */
 
 extern void signalHandler(int sig);
