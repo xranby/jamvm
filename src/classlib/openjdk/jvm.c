@@ -666,6 +666,35 @@ void JVM_SetClassSigners(JNIEnv *env, jclass cls, jobjectArray signers) {
 }
 
 
+/* JVM_GetResourceLookupCacheURLs
+   is part of the
+   JDK-8061651 JDK8u API
+*/
+
+jobjectArray JVM_GetResourceLookupCacheURLs(JNIEnv *env, jobject loader) {
+    return NULL; // tell OpenJDK 8 that the lookup cache API is unavailable
+}
+
+/* JVM_GetResourceLookupCache
+   is unused however it is part of the
+   JDK-8061651 JDK8u API
+*/
+
+jintArray JVM_GetResourceLookupCache(JNIEnv *env, jobject loader, const char *resource_name) {
+    UNIMPLEMENTED("JVM_GetResourceLookupCache");
+    return 0;
+}
+
+/* JVM_KnownToNotExist
+   is unused however it is part of the
+   JDK-8061651 JDK8u API
+*/
+
+jboolean JVM_KnownToNotExist(JNIEnv *env, jobject loader, const char *classname) {
+    UNIMPLEMENTED("JVM_KnownToNotExist");
+    return 0;
+}
+
 /* JVM_GetProtectionDomain */
 
 jobject JVM_GetProtectionDomain(JNIEnv *env, jclass cls) {
